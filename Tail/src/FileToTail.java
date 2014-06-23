@@ -34,4 +34,8 @@ public class FileToTail {
         }
         System.out.println(list.toString());
     }
+
+    public void closeFile() throws IOException {
+        this.br.close();
+    }
 }
