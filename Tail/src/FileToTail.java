@@ -1,41 +1,37 @@
 import java.io.*;
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class FileToTail {
+    String filePath;
     BufferedReader br;
 
-    public FileToTail(String filePath) throws FileNotFoundException {
-        this.br = new BufferedReader(new FileReader(filePath));
-    }
-
-    public String getLine() throws IOException {
-        try {
-            return br.readLine();
-        } catch (IOException e) {
-            return null;
-        }
+    public FileToTail(String filePath) {
+        this.filePath = filePath;
     }
 
     public void tail(int capacity) throws IOException {
-        LinkedList<String> list = new LinkedList<String>();
-
-        for (int i = 0; i < capacity; i++) {
-            list.add(getLine());
-        }
-
-        while (true) {
-            String line = getLine();
-            if (line != null) {
-                list.remove();
-                list.add(getLine());
-            } else {
-                break;
+        br = new BufferedReader(new FileReader(filePath));
+        Queue<String> queue = new LinkedList<String>();
+        try {
+            for (int i = 0; i < capacity; i++) {
+                queue.add(br.readLine());
             }
-        }
-        System.out.println(list.toString());
-    }
 
-    public void closeFile() throws IOException {
-        this.br.close();
+            while (true) {
+                String line = br.readLine();
+                if (line != null) {
+                    queue.remove();
+                    queue.add(line);
+                } else {
+                    break;
+                }
+            }
+            System.out.println(queue.toString());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            br.close();
+        }
     }
 }
